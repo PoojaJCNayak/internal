@@ -18,8 +18,7 @@ app.use(bodyParser.json());
 // from a cloud data store
 const mockEvents = {
     events: [
-        { title: 'an event', id: 1, description: 'something really cool' },
-        { title: 'another event', id: 2, description: 'something even cooler' }
+        { title: 'Impact Day 2018', id: 1, description: 'Impact Day 2018 to be held all over Deloitte Indian locations',location: 'India' }
     ]
 };
 
@@ -51,11 +50,22 @@ app.post('/event', (req, res) => {
     const ev = { 
         title: req.body.title, 
         description: req.body.description,
-        id : mockEvents.events.length + 1
+        location: req.body.location,   
+        //likes: 0, // Likes count
+        id: mockEvents.events.length + 1
      }
     // add to the mock array
     mockEvents.events.push(ev);
     // return the complete array
+    res.json(mockEvents);
+});
+
+//Increment of likes
+app.post('/event/like', (req, res) => {
+    console.log (req.body.id);
+    var objIndex = mockEvents.events.findIndex((obj => obj.id == req.body.id));
+    var likes = mockEvents.events[objIndex].likes;
+    mockEvents.events[objIndex].likes = ++likes;
     res.json(mockEvents);
 });
 
